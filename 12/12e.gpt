@@ -1,0 +1,61 @@
+#!/bin/sh
+set terminal cairolatex pdf standalone header "\\usepackage{amsfonts}"
+
+set output "12e.tex"
+
+set multiplot
+
+# -------- MAIN PLOT
+
+set label 1 "{\\Large \\textbf{(e)}}" at graph 0.90,0.15 center
+
+#set title "Amplitudes Mpembas inversos, con T final T=2.5,h=4.01"
+set ylabel "$a$"
+set xlabel "{\\huge $T_{\\mathrm{start}}$}" offset 0,-0.25
+set format x "%.1f"
+set ylabel "{\\huge $10^{2} \\times a_{i}$}" offset -2,0
+set xrange [0.0:0.6]
+set yrange [-0.0455:0.0056]
+set lmargin 12
+set bmargin 4
+set ytics ('-8' -8e-2, '-6' -6e-2, '-4' -4e-2, '-2' -2e-2, '0' 0e-2, '2' 2e-2, '4' 4e-2, '6' 6e-2, '8' 8e-2, '10' 10e-2, '12' 12e-2, '14' 14e-2)
+p "inv_a1_ej_nocross_0.5.txt" u 1:2:3 w yerr pt 7 ps 0.25 lc rgb "#0030bd" not, \
+  "inv_a1_ej_nocross_0.5.txt" u 1:2 w points pt 9 ps 1.33 lc rgb "#0030bd" not, \
+  "inv_a1_ej_nocross_0.066.txt" u 1:2:3 w yerr pt 7 ps 0.25 lc rgb "#dd1000" not, \
+  "inv_a1_ej_nocross_0.066.txt" u 1:2 w points pt 9 ps 1.33 lc rgb "#dd1000" not, \
+  "inv_a2_ej_nocross_0.5.txt" u 1:2:3 w yerr pt 7 ps 0.25 lc rgb "#0030bd" not, \
+  "inv_a2_ej_nocross_0.5.txt" u 1:2 w points pt 5 ps 1.0 lc rgb "#0030bd" not, \
+  "inv_a2_ej_nocross_0.066.txt" u 1:2:3 w yerr pt 7 ps 0.25 lc rgb "#dd1000" not, \
+  "inv_a2_ej_nocross_0.066.txt" u 1:2 w points pt 5 ps 1.0 lc rgb "#dd1000" not, \
+  0 lt -1 not
+unset label 1
+#pause -1
+reset
+
+# --------- INSET
+
+set size 0.45,0.45
+set origin 0.1,0.2
+
+set ylabel "$a$"
+set xlabel "{\\large $T_{\\mathrm{start}}$ ($h_{\\mathrm{start}}=3.9$)}" offset 0,-0.15
+set format x "%.1f"
+set ylabel "{\\large $10^{2} \\times a_{i}$}" offset -0.5,0
+set xrange [0.4:0.6]
+#set yrange [-0.02:0.001]
+set yrange [-11e-2:0.01]
+set lmargin 12
+set bmargin 4
+set ytics ('-12' -12e-2, '-8' -8e-2, '-4' -4e-2, '0' 0, '4' 4e-2, '8' 8e-2)
+set xtics ('0.5' 0.5)
+p "inv_a1_ej_cross.txt" u 1:2:3 w yerr pt 7 ps 0.25 lc rgb "#40bbff" not, \
+  "inv_a1_ej_cross.txt" u 1:2 w points pt 9 ps 1.33 lc rgb "#40bbff" not, \
+  "inv_a2_ej_cross.txt" u 1:2:3 w yerr pt 7 ps 0.25 lc rgb "#40bbff" not, \
+  "inv_a2_ej_cross.txt" u 1:2 w points pt 5 ps 1.0 lc rgb "#40bbff" not, \
+   0 lt -1 not
+unset label 1
+#pause -1
+reset
+
+unset multiplot
+#pause -1
