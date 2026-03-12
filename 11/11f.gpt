@@ -1,0 +1,68 @@
+#!/bin/sh
+set terminal cairolatex pdf standalone header "\\usepackage{amsfonts}"
+set output "11f.tex"
+
+set multiplot
+
+# ---------- MAIN PANEL
+
+moffset = 0.01
+
+set label 1 "{\\Large \\textbf{(f)}}" at graph 0.10,0.85 center
+
+set ylabel "$a$"
+set xlabel "{\\huge $T_{\\mathrm{start}}$}" offset 0,-0.5
+set format x "%.1f"
+set ylabel "{\\huge $10^{3} \\times a_{i}$}" offset -2,0
+set lmargin 12
+set bmargin 4
+set xrange [0.4:3.0]
+set yrange [-0.0055:0.0023]
+set ytics ('-16' -16e-3, '-12' -12e-3, '-5' -5e-3, '-4' -4e-3, '-3' -3e-3, '-2' -2e-3, '-1' -1e-3, '0' 0e-3, '1' 1e-3, '2' 2e-3, '3' 3e-3, '4' 4e-3, '5' 5e-3, '6' 6e-3, '14' 14e-3)
+p "a1_m_nocrossh_0.5.txt" u ($1-moffset):($2):3 w yerr pt 7 ps 0.25 lc rgb "#0030bd" not, \
+  "a1_m_nocrossh_0.5.txt" u ($1-moffset):($2) w points pt 9 ps 1.33 lc rgb "#0030bd" not, \
+  "a1_m_nocrossh_2.5.txt" u ($1-moffset):($2):3 w yerr pt 7 ps 0.25 lc rgb "#dd1000" not, \
+  "a1_m_nocrossh_2.5.txt" u ($1-moffset):($2) w points pt 9 ps 1.33 lc rgb "#dd1000" not, \
+  "a1_m_nocrossh_extra_1.5.txt" u ($1-moffset):($2):3 w yerr pt 7 ps 0.25 lc rgb "#bfdfff" not, \
+  "a1_m_nocrossh_extra_1.5.txt" u ($1-moffset):($2) w points pt 9 ps 1.33 lc rgb "#bfdfff" not, \
+  "a1_m_nocrossh_extra_2.0.txt" u ($1-moffset):($2):3 w yerr pt 7 ps 0.25 lc 10 not, \
+  "a1_m_nocrossh_extra_2.0.txt" u ($1-moffset):($2) w points pt 9 ps 1.33 lc 10 not, \
+  "a1_m_nocrossh_extra_2.7.txt" u ($1-moffset):($2):3 w yerr pt 7 ps 0.25 lc rgb "#ffcfff" not, \
+  "a1_m_nocrossh_extra_2.7.txt" u ($1-moffset):($2) w points pt 9 ps 1.33 lc rgb "#ffcfff" not, \
+  "a2_m_nocrossh_0.5.txt" u ($1+moffset):($2):3 w yerr pt 7 ps 0.25 lc rgb "#0030bd" not, \
+  "a2_m_nocrossh_0.5.txt" u ($1+moffset):($2) w points pt 5 ps 1.0 lc rgb "#0030bd" not, \
+  "a2_m_nocrossh_2.5.txt" u ($1+moffset):($2):3 w yerr pt 7 ps 0.25 lc rgb "#dd1000" not, \
+  "a2_m_nocrossh_2.5.txt" u ($1+moffset):($2) w points pt 5 ps 1.0 lc rgb "#dd1000" not, \
+  "a2_m_nocrossh_extra_1.5.txt" u ($1+moffset):($2):3 w yerr pt 7 ps 0.25 lc rgb "#bfdfff" not, \
+  "a2_m_nocrossh_extra_1.5.txt" u ($1+moffset):($2) w points pt 5 ps 1.0 lc rgb "#bfdfff" not, \
+  "a2_m_nocrossh_extra_2.0.txt" u ($1+moffset):($2):3 w yerr pt 7 ps 0.25 lc 10 not, \
+  "a2_m_nocrossh_extra_2.0.txt" u ($1+moffset):($2) w points pt 5 ps 1.0 lc 10 not, \
+  "a2_m_nocrossh_extra_2.7.txt" u ($1+moffset):($2):3 w yerr pt 7 ps 0.25 lc rgb "#ffcfff" not, \
+  "a2_m_nocrossh_extra_2.7.txt" u ($1+moffset):($2) w points pt 5 ps 1.0 lc rgb "#ffcfff" not, \
+  0 lt -1 not
+unset label 1
+reset
+# ------------- INSET
+
+set size 0.4,0.4
+set origin 0.5,0.26
+
+set ylabel "$a$"
+set xlabel "{\\large $T_{\\mathrm{start}}$ ($h_{\\mathrm{start}}=3.9$)}" offset 0,0.2
+set format x "%.1f"
+set ylabel "{\\large $10^{2} \\times a_{i}$}" offset -0,0
+set lmargin 8
+set bmargin 2
+set xrange [0.4:0.6]
+set yrange [-0.023:0.023]
+set xtics ('0.5' 0.5)
+set ytics ('-12' -12e-2, '-5' -5e-2, '-4' -4e-2, '-3' -3e-2, '-2' -2e-2, '-1' -1e-2, '0' 0e-2, '1' 1e-2, '2' 2e-2, '3' 3e-2, '4' 4e-2, '5' 5e-2, '6' 6e-2, '14' 14e-2)
+#set ytics ('-2' -2e-2, '-1' -1e-2, '0' 0e-3, '1' 1e-2, '2' 2e-2, '3' 3e-2, '4' 4e-2, '5' 5e-2)
+p "a1_m_cross.txt" u ($1):($2):3 w yerr pt 7 ps 0.25 lc rgb "#40bbff" not, \
+  "a1_m_cross.txt" u ($1):($2) w points pt 9 ps 1.33 lc rgb "#40bbff" not, \
+  "a2_m_cross.txt" u ($1):($2):3 w yerr pt 7 ps 0.25 lc rgb "#40bbff" not, \
+  "a2_m_cross.txt" u ($1):($2) w points pt 5 ps 1.0 lc rgb "#40bbff" not, \
+   0 lt -1 not
+unset multiplot
+reset
+
