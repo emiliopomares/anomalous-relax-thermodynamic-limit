@@ -1,0 +1,121 @@
+########################################
+# Parameters
+########################################
+V     = 512.*512.
+norma = V*5.e5
+EJ    = 0.21362353286995622
+
+########################################
+# Continuous model
+########################################
+f(x) = exp(-x/tau) * (a1/x**a3) * (1 + a2/x + a4/(x*x) + a5/(x*x*x))
+
+########################################
+# Initial parameters
+########################################
+tau = 4.9853
+a1  = 0.832839
+a2  = -1.25555
+a3  = 0.380757
+a4  = 3.2327
+a5  = 1
+
+########################################
+# Fit: continuous model
+########################################
+fit [5:43.5] f(x) \
+    "./curve_thermalization_T0.5_EJ_staggered_start_500k_L512.csv" \
+    using 1:(EJ-($2/norma)):($3/V) \
+    yerr \
+    via tau,a1,a2,a3,a4,a5
+
+fit [5:43.5] f(x) \
+    "./curve_thermalization_T0.5_EJ_staggered_start_500k_L512.csv" \
+    using 1:(EJ-($2/norma)):($3/V) \
+    yerr \
+    via tau,a1,a2,a3,a4,a5
+
+
+########################################
+# Parameters for exponential sum model
+########################################
+tau1 = tau
+
+b1   = 0.248584
+b2   = 0.5
+b3   = 0.176277
+
+tau2 = 3.54069
+tau3 = 1.3
+
+########################################
+# Model: multi-exponential
+########################################
+g(x) = b1*exp(-x/tau1) + b2*exp(-x/tau2) + b3*exp(-x/tau3)
+
+########################################
+# Fits: multi-exponential model
+########################################
+fit [5:43.5] g(x) \
+    "./curve_thermalization_T0.5_EJ_staggered_start_500k_L512.csv" \
+    using 1:(EJ-($2/norma)):($3/V) \
+    yerr \
+    via b1,b2,tau3,b3
+
+fit [5:43.5] g(x) \
+    "./curve_thermalization_T0.5_EJ_staggered_start_500k_L512.csv" \
+    using 1:(EJ-($2/norma)):($3/V) \
+    yerr \
+    via b1,b2,tau2,tau3,b3
+
+fit [5:43.5] g(x) \
+    "./curve_thermalization_T0.5_EJ_staggered_start_500k_L512.csv" \
+    using 1:(EJ-($2/norma)):($3/V) \
+    yerr \
+    via tau1,b1,b2,tau2,tau3,b3
+
+
+########################################
+# Panel (c)
+########################################
+set terminal cairolatex pdf standalone size 6,4 header "\\usepackage{amsfonts}"
+set output "6c.tex"
+
+########################################
+# Formatting
+########################################
+set lmargin 12
+set rmargin 4
+set tmargin 2
+set bmargin 4
+
+set origin 0.00,0.00
+
+set xlabel "{\\Huge $t$}"
+set ylabel "{\\Huge $\\Delta/\\epsilon$}" offset -1.5,0
+
+set ytics
+set yrange [-1.2:1.2]
+
+set label 1 "{\\Huge \\textbf{(c)}}" at graph 0.90,0.85 center
+
+########################################
+# Plot
+########################################
+plot [5:43.5] \
+"./curve_thermalization_T0.5_EJ_staggered_start_500k_L512.csv" \
+    every 6 \
+    using 1:(f($1)-g($1))/($3/V) \
+    pt 7 ps 0.35 \
+    notitle, \
+0  lt -1 notitle, \
+1  lt -1 notitle, \
+-1 lt -1 notitle
+
+########################################
+# Cleanup
+########################################
+reset
+unset ytics
+set format y "%.1f"
+unset label

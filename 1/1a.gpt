@@ -1,0 +1,82 @@
+set terminal cairolatex pdf standalone
+set output "1a.tex"
+
+########################################
+# Formatting
+########################################
+set format x "%.1f"
+set format y "%.1f"
+
+set lmargin 12
+set bmargin 4
+set xlabel "{\\huge $h$}" offset 0,-0.25
+set ylabel "{\\huge $T_{b}$}" offset -1.5,0
+
+set label 9 "{\\Large \\textbf{(a)}}" at graph 0.90,0.85 center front
+
+set label 1 "\\fontsize{14}{20}\\selectfont AFM" at 1.51, 0.95 center front
+set label 2 "\\fontsize{14}{20}\\selectfont PM"  at 3.3, 2.2  center front
+
+set label 3 "\\fontsize{10}{16}\\selectfont A" at 4.13, 0.048 center front
+set label 4 "\\fontsize{10}{16}\\selectfont B" at 4.04, 0.16 center front
+set label 5 "\\fontsize{10}{16}\\selectfont C" at 4.08, 0.57 center front
+set label 6 "\\fontsize{10}{16}\\selectfont D" at 3.85, 0.57 center front
+set label 7 "\\fontsize{10}{16}\\selectfont E" at 4.09, 2.57 center front
+
+########################################
+# Ranges
+########################################
+xmin = 0.0
+xmax = 4.2
+ymin = -0.045
+ymax = 2.7
+
+set xrange [xmin:xmax]
+set yrange [ymin:ymax]
+
+########################################
+# Fill style
+########################################
+set style fill solid 0.25 noborder
+
+########################################
+# Extract curve endpoint
+########################################
+stats "1a_data.txt" using 2:1 nooutput
+x_end = STATS_max_x
+y_end = STATS_max_y
+
+########################################
+# PM background (entire plot)
+########################################
+set object 1 rect from xmin,ymin to xmax,ymax \
+    fc rgb "#DD8452" fs solid 0.5 noborder behind
+
+########################################
+# Plot
+########################################
+plot \
+    "1a_data.txt" u 2:1 w filledcurves y1=ymin \
+        lc rgb "#4C72B0" notitle, \
+    \
+    "1a_data.txt" u 2:1 w lines lw 2 lc rgb "black" notitle, \
+    \
+    '-' with circles fc rgb "red"    fs solid 1.0 noborder notitle, \
+    '-' with points pt 2 ps 1 lw 8 lc rgb "black" notitle, \
+    '-' with circles fc rgb "#0080FF"   fs solid 1.0 noborder notitle, \
+    '-' with points pt 9 ps 0.95 lt 1 lc rgb "#008010" notitle, \
+    '-' with circles fc rgb "orange" fs solid 1.0 noborder notitle
+
+########################################
+# Inline point data
+########################################
+4.01 0.066666667 0.04
+e
+4.01 0.005 0.04
+e
+4.01 0.5 0.04
+e
+3.9  0.5 0.04
+e
+4.01 2.5 0.04
+e

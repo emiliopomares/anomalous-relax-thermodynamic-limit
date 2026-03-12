@@ -1,0 +1,111 @@
+########################################
+# Parameters
+########################################
+V     = 512.*512.
+Norm  = V*5.e5
+EJ    = 0.3813348342429973
+
+########################################
+# Terminal
+########################################
+set terminal cairolatex pdf standalone size 6,4 \
+    header "\\usepackage{amsfonts}"
+
+########################################
+# Fit functions
+########################################
+f(x) = exp(-x/tau) * (a1/x**a3) * (1 + a2/x + a4/(x*x) + a5/(x*x*x))
+
+tau = 2.5
+a1  = 0.832839
+a2  = 1.25555
+a3  = 0.380757
+a4  = 3.2327
+a5  = 1
+
+########################################
+# Fit: continuous model
+########################################
+fit [12:28.5] f(x) \
+    "./curve_thermalization_T0.067_EJ_staggered_start_500k_L512.csv" \
+    using 1:(EJ-($2/Norm)):($3/V) yerror via tau,a1,a2,a3,a4,a5
+
+fit [12:28.5] f(x) \
+    "./curve_thermalization_T0.067_EJ_staggered_start_500k_L512.csv" \
+    using 1:(EJ-($2/Norm)):($3/V) yerror via tau,a1,a2,a3,a4,a5
+
+########################################
+# Multi–exponential model
+########################################
+tau1 = tau
+
+b1   = 0.248584
+b2   = 0.176277
+tau2 = 2.1
+tau3 = 2.0
+b3   = 0.5
+
+g(x) = b1*exp(-x/tau1) + b2*exp(-x/tau2) + b3*exp(-x/tau3)
+
+########################################
+# Fit: multi–exponential model
+########################################
+fit [12:28.5] g(x) \
+    "./curve_thermalization_T0.067_EJ_staggered_start_500k_L512.csv" \
+    using 1:(EJ-($2/Norm)):($3/V) yerror via b1,b2,tau3,b3
+
+fit [12:28.5] g(x) \
+    "./curve_thermalization_T0.067_EJ_staggered_start_500k_L512.csv" \
+    using 1:(EJ-($2/Norm)):($3/V) yerror via b1,b2,tau2,tau3,b3
+
+fit [12:28.5] g(x) \
+    "./curve_thermalization_T0.067_EJ_staggered_start_500k_L512.csv" \
+    using 1:(EJ-($2/Norm)):($3/V) yerror via tau1,b1,b2,tau2,tau3,b3
+
+########################################
+# Output figure
+########################################
+set terminal cairolatex pdf standalone size 6,4 \
+    header "\\usepackage{amsfonts}"
+set output "5a.tex"
+
+########################################
+# Formatting
+########################################
+set lmargin 12
+set rmargin 4
+set tmargin 2
+set bmargin 4
+
+set origin 0.02,0.0
+
+set xlabel "{\\Huge $t$}"
+set ylabel "{\\Huge $10^{2} \\times {\\langle {e_{J}}^{\\perp} \\rangle_{t}}$}" offset -2.75,0
+
+set ytics ( \
+    '0' 0, \
+    '1' 1e-3, \
+    '2' 2e-3, \
+    '3' 3e-3, \
+    '4' 4e-3, \
+    '5' 5e-3, \
+    '6' 6e-3, \
+    '7' 7e-3, \
+    '8' 8e-3  \
+)
+
+set label 1 "{\\Huge \\textbf{(a)}}" at graph 0.90,0.85 center front
+
+########################################
+# Plot
+########################################
+plot [12:28.5] \
+"./curve_thermalization_T0.067_EJ_staggered_start_500k_L512.csv" \
+    every 12 \
+    using 1:(EJ-($2/Norm)):($3/V) \
+    with points pt 7 ps 1.25 \
+    notitle, \
+\
+f(x) notitle, \
+g(x) notitle, \
+0 lt -1 notitle

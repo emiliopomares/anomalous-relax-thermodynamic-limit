@@ -1,0 +1,36 @@
+########################################
+# Terminal and Output
+########################################
+reset
+set terminal cairolatex pdf standalone
+set output "2.tex"
+
+########################################
+# Formatting
+########################################
+set format y "%.2f"
+
+set xlabel "$\\beta$"
+set ylabel "$\\Delta$"
+
+########################################
+# Margins (optional, adjust if needed)
+########################################
+# set lmargin 12
+# set bmargin 4
+
+########################################
+# Axes
+########################################
+set log x
+
+xmin = 0.38
+xmax = 220
+set xrange [xmin:xmax]
+
+########################################
+# Plot
+########################################
+plot [xmin:xmax] \
+    "< paste 2_256.txt 2_512.txt" u 2:($3-$7):(sqrt(($4)**2 + ($8)**2)) w yerr notitle, \
+    0 lt -1 notitle

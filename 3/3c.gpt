@@ -1,0 +1,56 @@
+########################################
+# Fit and Terminal
+########################################
+set fit noerrorscaling
+
+set terminal cairolatex pdf standalone header "\\usepackage{amsfonts}"
+
+########################################
+# Constants
+########################################
+ejeq = 0.1369965618430244
+meq  = 0.4970414046986898
+
+
+########################################
+# Main plot: $\\langle e_J^\\perp \\rangle_t$
+########################################
+set output "3c.tex"
+set multiplot
+
+# --- Main plot ---
+set origin 0,0
+set size 1,1
+set label 1 "{\\huge \\textbf{(c)}}" at graph 0.10,0.85 center
+
+set xlabel "{\\huge $t$}"
+set ylabel "{\\huge $10^{2} \\times {\\langle {e_{J}^{\\perp}} \\rangle_{t}}$}" offset -2.5,0
+set lmargin 12
+set bmargin 4
+set xrange [0:70]
+set yrange [-0.008:0.06]
+set format y "%.2f"
+set ytics ('-6' -6e-2,'-5' -5e-2,'-4' -4e-2,'-3' -3e-2,'-2' -2e-2,'-1' -1e-2,'0' 0e-2,'1' 1e-2,'2' 2e-2,'3' 3e-2,'4' 4e-2,'5' 5e-2,'6' 6e-2,'7' 7e-2,'8' 8e-2)
+
+plot \
+    "curve_EJ_precooling_tw0.35_1.5m_L256.csv" every 6 u 1:($2/(256.*256*1500000)-ejeq):($3/(256.*256)) w points pt 7 ps 0.2 notitle, \
+    "curve_EJ_precooling_tw0.35_375k_L512.csv" every 6 u 1:($2/(512.*512*(1500000/4))-ejeq):($3/(512.*512)) w points pt 7 ps 0.2 notitle, \
+    0 lt -1 notitle
+
+unset label 1
+
+# --- Inset ---
+reset
+set xlabel "$t$"
+set size 0.68,0.58
+set origin 0.27,0.33
+
+set auto
+set ylabel "$10^{5} \\times \\Delta$"
+set ytics ('-8' -8e-5,'-7' -7e-5,'-6' -6e-5,'-5' -5e-5,'-4' -4e-5,'-3' -3e-5,'-2' -2e-5,'-1' -1e-5,'0' 0e-5,'1' 1e-5,'2' 2e-5,'3' 3e-5,'4' 4e-5,'5' 5e-5,'6' 6e-5,'7' 7e-5,'8' 8e-5)
+set yrange [-3.1e-5:4.7e-5]
+
+plot [0:70] "< paste curve_EJ_precooling_tw0.35_1.5m_L256.csv curve_EJ_precooling_tw0.35_375k_L512.csv" every 6 u 1:(($2/(256.*256*1500000)) - ($5/(512.*512*(1500000/4)))):(sqrt(($3/(256.*256))**2 + ($6/(512.*512))**2)) w yerr pt 7 ps 0.2 notitle, \
+     0 lt -1 notitle
+
+unset multiplot

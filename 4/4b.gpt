@@ -1,0 +1,71 @@
+########################################
+# Terminal
+########################################
+set terminal cairolatex pdf standalone
+set output "4b.tex"
+
+reset
+set auto
+
+########################################
+# Parameters
+########################################
+meq  = 0.49704133449469673
+ejeq = 0.13699638971046166
+
+V    = 512.*512.
+Norm = V*1.5e6
+
+########################################
+# Formatting
+########################################
+set lmargin 14
+set bmargin 4
+
+set xlabel "{\\LARGE $t$}"
+set ylabel "{\\LARGE ${\\langle m^{\\perp}_{\\mathrm{u}} \\rangle_{t}}$}" offset -2,0
+
+set label 1 "{\\Large \\textbf{(b)}}" at graph 0.90,0.85 center front
+
+########################################
+# Log scale
+########################################
+set logscale y
+
+set ytics ( \
+    '$10^{0}$'  1e0,  \
+    '$10^{-1}$' 1e-1, \
+    '$10^{-2}$' 1e-2, \
+    '$10^{-3}$' 1e-3, \
+    '$10^{-4}$' 1e-4, \
+    '$10^{-5}$' 1e-5, \
+    '$10^{-6}$' 1e-6  \
+)
+
+########################################
+# Plot range
+########################################
+set xrange [3:14]
+
+########################################
+# Plot
+########################################
+plot \
+"./curve_thermalization_T2.5_M_random_start_1.5m_L512.csv" \
+    every 6 \
+    using 1:(($2/Norm)-meq):($3/V) \
+    with yerrorbars \
+    lc rgb "blue" \
+    notitle, \
+\
+"./curve_thermalization_T2.5_M_staggered_start_1.5m_L512.csv" \
+    every 6 \
+    using 1:(meq-($2/Norm)):($3/V) \
+    with yerrorbars \
+    lc rgb "dark-green" \
+    notitle
+
+########################################
+# Cleanup
+########################################
+unset label 1

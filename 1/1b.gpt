@@ -1,0 +1,81 @@
+############################################################
+# Reset & Initialization
+############################################################
+reset
+set auto
+
+############################################################
+# Output (LaTeX + PDF via cairolatex)
+############################################################
+set terminal cairolatex pdf standalone
+set output "1b.tex"
+
+############################################################
+# Axis Formatting
+############################################################
+set format y "%.1f"
+
+set lmargin 12
+set bmargin 4
+
+set xlabel "{\\huge $T_b$}" offset 0,-0.25
+set ylabel "{\\huge $\\chi_{\\mathrm{st}}$}" offset -1,0
+
+############################################################
+# Panel Label
+############################################################
+set label 6 "{\\Large \\textbf{(b)}}" at graph 0.90,0.85 center
+
+############################################################
+# Point Labels (Annotated Positions)
+############################################################
+set label 1 "\\fontsize{14}{18}\\selectfont A" at 0.085,        0.350858846689722 center
+set label 2 "\\fontsize{14}{18}\\selectfont B" at 0.16,         2.372792400379840 center
+set label 3 "\\fontsize{14}{18}\\selectfont C" at 1./2.26,      3.836633725088933 center
+set label 4 "\\fontsize{14}{18}\\selectfont D" at 1./2.42,      7.601257576796541 center
+set label 5 "\\fontsize{14}{18}\\selectfont E" at 2.4,          2.704538429231367 center
+
+############################################################
+# Line & Style Configuration
+############################################################
+set termoption dashed
+
+# Reference line style
+set style line 1 dashtype (4,3) lw 2 lc rgb "magenta"
+
+############################################################
+# Plot Range & Main Plot
+############################################################
+plot [0.001:2.55] \
+    "1b_data_256.txt" u (1/$2):3:4 w yerr pt 7 ps 0.05 notitle, \
+    "1b_data_512.txt" u (1/$2):3:4 w yerr pt 7 ps 0.05 notitle, \
+    '-' with points pt 2 ps 1 lw 8 lc rgb "black" notitle, \
+    '-' with points pt 7 ps 0.9 lc rgb "red"     notitle, \
+    '-' with points pt 7 ps 0.9 lc rgb "#0080FF" notitle, \
+    '-' with points pt 9 ps 0.9 lc rgb "#008010" notitle, \
+    '-' with points pt 7 ps 0.9 lc rgb "orange"  notitle, \
+    1.663 w lines ls 1 notitle
+
+############################################################
+# Inline Data Blocks (One Point per Dataset)
+############################################################
+
+# Point A
+0.005    0.070858846689722
+e
+
+# Point B
+0.066667 2.582792400379840
+e
+
+# Point C
+0.5      3.636633725088933
+e
+
+# Point D
+0.5      7.508257576796541
+e
+
+# Point E
+2.5      2.564538429231367
+e

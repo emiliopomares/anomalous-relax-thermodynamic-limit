@@ -1,0 +1,122 @@
+########################################
+# Parameters
+########################################
+V      = 512.*512.
+Norm   = V*5.e5
+EJ     = 0.3813348342429973
+
+########################################
+# Terminal
+########################################
+set terminal cairolatex pdf standalone size 6,4 \
+    header "\\usepackage{amsfonts}"
+
+########################################
+# Fit functions
+########################################
+f(x) = exp(-x/tau) * (a1/x**a3) * (1 + a2/x + a4/(x*x) + a5/(x*x*x))
+
+g(x) = b1*exp(-x/tau1) + b2*exp(-x/tau2) + b3*exp(-x/tau3)
+
+########################################
+# Initial parameters (fit f)
+########################################
+tau = 2.5
+a1  = 0.832839
+a2  = 1.25555
+a3  = 0.380757
+a4  = 3.2327
+a5  = 1
+
+########################################
+# Fit range
+########################################
+fit_min = 12
+fit_max = 28.5
+
+########################################
+# Fit: function f
+########################################
+fit [fit_min:fit_max] f(x) \
+    "./curve_thermalization_T0.067_EJ_staggered_start_500k_L512.csv" \
+    using 1:(EJ-($2/Norm)):($3/V) yerror \
+    via tau,a1,a2,a3,a4,a5
+
+fit [fit_min:fit_max] f(x) \
+    "./curve_thermalization_T0.067_EJ_staggered_start_500k_L512.csv" \
+    using 1:(EJ-($2/Norm)):($3/V) yerror \
+    via tau,a1,a2,a3,a4,a5
+
+########################################
+# Parameters for g
+########################################
+tau1 = tau
+
+b1   = 0.248584
+b2   = 0.176277
+b3   = 0.5
+
+tau2 = 2.1
+tau3 = 2.0
+
+########################################
+# Fit: function g
+########################################
+fit [fit_min:fit_max] g(x) \
+    "./curve_thermalization_T0.067_EJ_staggered_start_500k_L512.csv" \
+    using 1:(EJ-($2/Norm)):($3/V) yerror \
+    via b1,b2,tau3,b3
+
+fit [fit_min:fit_max] g(x) \
+    "./curve_thermalization_T0.067_EJ_staggered_start_500k_L512.csv" \
+    using 1:(EJ-($2/Norm)):($3/V) yerror \
+    via b1,b2,tau2,tau3,b3
+
+fit [fit_min:fit_max] g(x) \
+    "./curve_thermalization_T0.067_EJ_staggered_start_500k_L512.csv" \
+    using 1:(EJ-($2/Norm)):($3/V) yerror \
+    via tau1,b1,b2,tau2,tau3,b3
+
+########################################
+# Output
+########################################
+set output "5c.tex"
+
+########################################
+# Plot formatting
+########################################
+set lmargin 12
+set rmargin 4
+set tmargin 2
+set bmargin 4
+
+set origin 0.00,0.00
+
+set xlabel "{\\Huge $t$}"
+set ylabel "{\\Huge $\\Delta/\\epsilon$}" offset -1.5,0
+
+set ytics
+set yrange [-1.2:1.2]
+
+set label 1 "{\\Huge \\textbf{(c)}}" at graph 0.90,0.85 center
+
+########################################
+# Plot
+########################################
+plot [fit_min:fit_max] \
+"./curve_thermalization_T0.067_EJ_staggered_start_500k_L512.csv" \
+    every 6 \
+    using 1:((f($1)-g($1))/($3/V)) \
+    with points pt 7 ps 0.45 notitle, \
+\
+0  lt -1 notitle, \
+1  lt -1 notitle, \
+-1 lt -1 notitle
+
+########################################
+# Cleanup
+########################################
+reset
+unset ytics
+set format y "%.1f"
+unset label
