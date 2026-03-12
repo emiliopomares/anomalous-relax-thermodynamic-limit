@@ -1,0 +1,61 @@
+#
+set terminal cairolatex pdf standalone
+set output "12b.tex"
+
+v=512.*512
+V=v*1500000
+meq_hot=0.4970414046986898
+ejeq_hot=0.1369965618430244
+eteq_hot=-1.8561394709987216
+etotal_eq = 0.1369965618430244-4.01*0.4970414046986898
+
+
+reset
+
+# ----------- MAIN PLOT
+
+set multiplot
+
+set label 1 "{\\Large \\textbf{(b)}}" at graph 0.90,0.85 center
+
+set xlabel "{\\LARGE $t$}"
+set ylabel "{\\LARGE ${\\langle {m}_{\\mathrm{u}}^{\\perp} \\rangle_{t}}$}" offset -2,0
+set format y "%.2f"
+set lmargin 12
+set bmargin 4
+set yrange [-0.025:0.125]
+set xrange [0:8]
+p "./curva_M_T0.5_h4.01_T2.5_h4.01_1500k.csv" every 3 u 1:($2/V-meq_hot):($3/v) with points pt 7 ps 0.35 lc rgb "#0030bd" notitle, \
+  "./curva_M_T0.5_h4.01_T2.5_h4.01_1500k.csv" every 3 u 1:($2/V-meq_hot):($3/v) smooth csplines lw 1.25 lc rgb "#0030bd" not, \
+  "./curva_M_T0.066_T2.5_1500k.csv" every 3 u 1:($2/V-meq_hot):($3/v) with points pt 7 ps 0.35 lc rgb "#dd1000" notitle, \
+  "./curva_M_T0.066_T2.5_1500k.csv" every 3 u 1:($2/V-meq_hot):($3/v) smooth csplines lw 1.25 lc rgb "#dd1000" not, \
+  "./curva_M_T0.5_h3.9_T2.5_h4.01_1500k.csv" every 3 u 1:($2/V-meq_hot):($3/v) with points pt 7 ps 0.35 lc rgb "#40bbff" notitle, \
+  "./curva_M_T0.5_h3.9_T2.5_h4.01_1500k.csv" every 3 u 1:($2/V-meq_hot):($3/v) smooth csplines lw 1.25 lc rgb "#40bbff" not, \
+   0 lt -1 not
+
+unset label 1
+reset
+# ----------- INSET
+
+set size 0.55,0.55
+set origin 0.4,0.27
+
+set xlabel "{\\large $t$}"
+set ylabel "{\\large $10^{5} \\times {\\langle {m}_{\\mathrm{u}}^{\\perp} \\rangle_{t}}$}" offset -2,0
+set ytics ('0' 0, '-1' -1e-5, '-2' -2e-5, '-3' -3e-5, '-4' -4e-5, '-5' -5e-5)
+set lmargin 12
+set bmargin 4
+set xrange [5:35]
+set yrange [-0.00006:0.69144e-05]
+p "./curva_M_T0.5_h4.01_T2.5_h4.01_1500k.csv" every 3 u 1:($2/V-meq_hot):($3/v) w yerr ps 0.25 lc rgb "#0030bd" not, \
+  "./curva_M_T0.066_T2.5_1500k.csv" every 3 u 1:($2/V-meq_hot):($3/v) w yerr ps 0.25 lc rgb "#dd1000" not, \
+  "./curva_M_T0.5_h3.9_T2.5_h4.01_1500k.csv" every 3 u 1:($2/V-meq_hot):($3/v) w yerr ps 0.25 lc rgb "#40bbff" not, \
+   0 lt -1 not
+
+# ---------- END INSET
+
+unset multiplot
+reset
+
+
+

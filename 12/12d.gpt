@@ -1,0 +1,90 @@
+#
+set terminal cairolatex pdf standalone
+
+v=512.*512
+V=v*1500000
+meq_hot=0.4970414046986898
+ejeq_hot=0.1369965618430244
+eteq_hot=-1.8561394709987216
+etotal_eq = 0.1369965618430244-4.01*0.4970414046986898
+
+set output "12d.tex"
+
+set multiplot
+
+set label 1 "{\\Large \\textbf{(d)}}" at graph 0.10,0.15 center
+
+# ------- MAIN PLOT
+
+set xlabel "{\\LARGE $t$}"
+set ylabel "{\\LARGE ${10^{3} \\times \\Delta_t {( {{\\mathcal{E}}^{\\#}} )} }$}" offset -2,0
+set ytics ('-1' -1e-3, '0' 0, '1' 1e-3, '2' 2e-3, '3' 3e-3, '4' 4e-3, '5' 5e-3, '6' 6e-3, '7' 7e-3, '8' 8e-3, '9' 9e-3, '10' 10e-3, '11' 11e-3, '12' 12e-3)
+set xrange [0:12]
+set yrange [-1.25e-3:10.8e-3]
+set lmargin 12
+set bmargin 4
+
+p \
+"< paste ./curva_EJ_T0.5_h4.01_T2.5_h4.01_1500k.csv \
+        ./curva_M_T0.5_h4.01_T2.5_h4.01_1500k.csv \
+        ./curva_EJ_T0.066_T2.5_1500k.csv \
+        ./curva_M_T0.066_T2.5_1500k.csv \
+        ./T0.5h4.01-_T2.5h4.01_MINUS_T0.066h4.01-_T2.5h4.01_errors.txt" \
+    u 1:(-($2/V-4.01*$5/V)+($8/V-4.01*$11/V)) \
+    w lines smooth csplines lw 1.5 lt 1 lc rgb "orange" not, \
+"" \
+    u 1:(-($2/V-4.01*$5/V)+($8/V-4.01*$11/V)):($13) \
+    w points pt 7 ps 0.25 lt 1 lc rgb "orange" not, \
+"< paste ./curva_EJ_T0.5_h3.9_T2.5_h4.01_1500k.csv \
+        ./curva_M_T0.5_h3.9_T2.5_h4.01_1500k.csv \
+        ./curva_EJ_T0.066_T2.5_1500k.csv \
+        ./curva_M_T0.066_T2.5_1500k.csv \
+        ./T0.5h3.9-_T2.5h4.01_MINUS_T0.066h4.01-_T2.5h4.01_errors.txt" \
+    u 1:(-($2/V-4.01*$5/V)+($8/V-4.01*$11/V)) \
+    w lines smooth csplines lw 1.5 lt 1 lc rgb "green" not, \
+"" \
+    u 1:(-($2/V-4.01*$5/V)+($8/V-4.01*$11/V)):($13) \
+    w points pt 7 ps 0.25 lt 1 lc rgb "green" not, \
+\
+0 lt -1 not
+
+unset label 1
+reset
+# --------- INSET
+
+set size 0.55,0.55
+set origin 0.4,0.36
+
+set xlabel "{\\large $t$}"
+set ylabel "{\\large $10^{4} \\times \\Delta_t {( {{\\mathcal{E}}^{\\#}} )} $}" offset -2,0
+set xrange [-0.0219802:0.207329]
+set yrange [-0.00157083:0.000943996]
+set lmargin 12
+set bmargin 4
+set ytics ('-10' -10e-4, '-5' -5e-4, '0' 0, '5' 5e-4, '10' 10e-4, '15' 15e-4, '20' 20e-4)
+
+p \
+"< paste ./curva_EJ_T0.5_h4.01_T2.5_h4.01_1500k.csv \
+        ./curva_M_T0.5_h4.01_T2.5_h4.01_1500k.csv \
+        ./curva_EJ_T0.066_T2.5_1500k.csv \
+        ./curva_M_T0.066_T2.5_1500k.csv \
+        ./T0.5h4.01-_T2.5h4.01_MINUS_T0.066h4.01-_T2.5h4.01_errors.txt" \
+    u 1:(-($2/V-4.01*$5/V)+($8/V-4.01*$11/V)) \
+    w lines smooth csplines lw 1.5 lt 1 lc rgb "orange" not, \
+"" \
+    u 1:(-($2/V-4.01*$5/V)+($8/V-4.01*$11/V)):($13) \
+    w points pt 7 ps 0.25 lt 1 lc rgb "orange" not, \
+"< paste ./curva_EJ_T0.5_h3.9_T2.5_h4.01_1500k.csv \
+        ./curva_M_T0.5_h3.9_T2.5_h4.01_1500k.csv \
+        ./curva_EJ_T0.066_T2.5_1500k.csv \
+        ./curva_M_T0.066_T2.5_1500k.csv \
+        ./T0.5h3.9-_T2.5h4.01_MINUS_T0.066h4.01-_T2.5h4.01_errors.txt" \
+    u 1:(-($2/V-4.01*$5/V)+($8/V-4.01*$11/V)) \
+    w lines smooth csplines lw 1.5 lt 1 lc rgb "green" not, \
+"" \
+    u 1:(-($2/V-4.01*$5/V)+($8/V-4.01*$11/V)):($13) \
+    w points pt 7 ps 0.25 lt 1 lc rgb "green" not, \
+\
+0 lt -1 not
+
+unset multiplot

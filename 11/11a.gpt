@@ -1,0 +1,64 @@
+#
+# ESTO TIENE EL mismoh y el saltoh mezclados
+set terminal cairolatex pdf standalone
+
+v=512.*512
+V=v*1500000
+meq_hot=0.4970414046986898
+ejeq_hot=0.1369965618430244
+eteq_hot=-1.8561394709987216
+meq_chill=0.5953337085607493
+ejeq_chill=0.3813348342429973
+
+etotal_eq = 0.3813348342429973-4.01*0.5953337085607493
+
+set output "11a.tex"
+
+set multiplot
+
+set label 1 "{\\Large \\textbf{(a)}}" at graph 0.10,0.15 center
+
+# ----------- MAIN PLOT
+
+set xlabel "{\\LARGE $t$}"
+set ylabel "{\\LARGE ${\\langle {e_{J}^{\\perp}} \\rangle_{t}}$}" offset -1.8,0
+set format y "%.2f"
+set lmargin 12
+set bmargin 4
+set xrange [0:8]
+plot \
+"./curva_EJ_T0.5_h4.01_T0.066_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_chill) with points pt 7 ps 0.35 lc rgb "#0030bd" notitle, \
+"./curva_EJ_T0.5_h4.01_T0.066_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_chill) smooth csplines lw 1.25 lc rgb "#0030bd" not, \
+"./curva_EJ_T2.5_h4.01_T0.066_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_chill) with points pt 7 ps 0.35 lc rgb "#dd1000" notitle, \
+"./curva_EJ_T2.5_h4.01_T0.066_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_chill) smooth csplines lw 1.25 lc rgb "#dd1000" not, \
+"./curva_EJ_T0.5_h3.9_T0.066_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_chill):($3/v) w points pt 7 ps 0.35 lc rgb "#40bbff" not, \
+"./curva_EJ_T0.5_h3.9_T0.066_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_chill):($3/v) smooth csplines lw 1.25 lc rgb "#40bbff" not, \
+"./curva_EJ_T2.0_h4.01_T0.066_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_chill):($3/v) w points pt 7 ps 0.35 lc 10 not, \
+"./curva_EJ_T2.0_h4.01_T0.066_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_chill):($3/v) smooth csplines lw 1.25 lc 10 not, \
+0 lt -1 not
+
+unset label 1
+reset
+
+# ----------- INSET
+
+set size 0.55,0.55
+set origin 0.4,0.22
+
+set xlabel "{\\large $t$}"
+set ylabel "{\\large $10^{5} \\times {\\langle {e_{J}^{\\perp}} \\rangle}_{t}$}" offset -2,0
+set ytics ('-25' -25e-5, '-20' -20e-5, '-15' -15e-5, '-10' -10e-5, '-5' -5e-5, '0' 0, '5' 5e-5, '10' 10e-5, '15' 15e-5, '20' 20e-5, '25' 25e-5)
+set lmargin 12
+set bmargin 4
+set xrange [10:28]
+set yrange [-12e-5:12e-5]
+p "./curva_EJ_T0.5_h4.01_T0.066_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_chill):($3/v) w yerr ps 0.25 lc rgb "#0030bd" not, \
+  "./curva_EJ_T2.5_h4.01_T0.066_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_chill):($3/v) w yerr ps 0.25 lc rgb "#dd1000" not, \
+  "./curva_EJ_T0.5_h3.9_T0.066_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_chill):($3/v) w yerr ps 0.25 lc rgb "#40bbff" not, \
+  "./curva_EJ_T2.0_h4.01_T0.066_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_chill):($3/v) w yerr ps 0.25 lc 10 not, \
+  0 lt -1 not
+
+unset multiplot
+reset
+
+

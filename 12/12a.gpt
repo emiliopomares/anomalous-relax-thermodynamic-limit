@@ -1,0 +1,55 @@
+#
+set terminal cairolatex pdf standalone
+
+v=512.*512
+V=v*1500000
+meq_hot=0.4970414046986898
+ejeq_hot=0.1369965618430244
+eteq_hot=-1.8561394709987216
+etotal_eq = 0.1369965618430244-4.01*0.4970414046986898
+
+
+set output "12a.tex"
+
+set label 1 "{\\Large \\textbf{(a)}}" at graph 0.90,0.15 center
+
+# -------- MAIN PLOT
+
+set multiplot
+
+set xlabel "{\\LARGE $t$}"
+set ylabel "{\\LARGE ${\\langle {e_{J}^{\\perp}} \\rangle_{t}}$}" offset -2,0
+set format y "%.2f"
+set lmargin 12
+set bmargin 4
+set xrange [0:8]
+set yrange [-0.22:0.5]
+p "./curva_EJ_T0.5_h4.01_T2.5_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_hot):($3/v) with points pt 7 ps 0.35 lc rgb "#0030bc" notitle, \
+  "./curva_EJ_T0.5_h4.01_T2.5_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_hot):($3/v) smooth csplines lw 1.25 lc rgb "#0030bc" not, \
+  "./curva_EJ_T0.066_T2.5_1500k.csv" every 3 u 1:($2/V-ejeq_hot):($3/v) with points pt 7 ps 0.35 lc rgb "#dd1000" notitle, \
+  "./curva_EJ_T0.066_T2.5_1500k.csv" every 3 u 1:($2/V-ejeq_hot):($3/v) smooth csplines lw 1.25 lc rgb "#dd1000" not, \
+  "./curva_EJ_T0.5_h3.9_T2.5_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_hot):($3/v) with points pt 7 ps 0.35 lc rgb "#40bbff" notitle, \
+  "./curva_EJ_T0.5_h3.9_T2.5_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_hot):($3/v) smooth csplines lw 1.25 lc rgb "#40bbff" not, \
+   0 lt -1 not
+
+unset label 1
+reset
+# -------- INSET
+
+set size 0.55,0.55
+set origin 0.4,0.38
+
+set xlabel "{\\large $t$}"
+set ylabel "{\\large $10^{4} \\times {\\langle {e_{J}^{\\perp}} \\rangle_{t}}$}" offset -2,0
+set ytics ('0' 0, '1' 1e-4, '-1' -1e-4, '-2' -2e-4, '-3' -3e-4, '-4' -4e-4, '-5' -5e-4)
+set lmargin 12
+set bmargin 4
+set xrange [5:35]
+set yrange [-0.00025:1.66673e-05]
+p "./curva_EJ_T0.5_h4.01_T2.5_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_hot):($3/v) w yerr ps 0.25 lc rgb "#0030bc" not, \
+  "./curva_EJ_T0.066_T2.5_1500k.csv" every 3 u 1:($2/V-ejeq_hot):($3/v) w yerr ps 0.25 lc rgb "#dd1000" not, \
+  "./curva_EJ_T0.5_h3.9_T2.5_h4.01_1500k.csv" every 3 u 1:($2/V-ejeq_hot):($3/v) w yerr ps 0.25 lc rgb "#40bbff" not, \
+   0 lt -1 not
+
+unset multiplot
+reset
