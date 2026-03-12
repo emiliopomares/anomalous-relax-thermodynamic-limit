@@ -1,0 +1,48 @@
+#
+set terminal cairolatex pdf standalone
+
+set output "9b.tex"
+
+set multiplot
+#set title "Proceso asimétrico 0.066,4.01 <-> 0.5,3.9 (EJ)"
+set label 1 "{\\Large \\textbf{(b)}}" at graph 0.90,0.85 center
+
+set label 2 "{\\large $B \\to D$}" at graph 0.55,0.85 center
+
+set label 3 "{\\large $D \\to B$}" at graph 0.15,0.45 center
+
+# ------------------ MAIN
+set lmargin 12
+set bmargin 4
+set xrange [10:100]
+set yrange [-4e-4:2e-4]
+set xlabel "{\\LARGE $t$}"
+set ylabel "{\\LARGE $10^{4} \\times {\\langle {e_{J}^{\\perp}} \\rangle_{t}}$}" offset -2,0
+set ytics ('0' 0, '1' 1e-4, '2' 2e-4, '-1' -1e-4, '-2' -2e-4, '-3' -3e-4, '-4' -4e-4, '-5' -5e-4, '-6' -6e-4)
+p "./curva_protocol_EJ_T0.066_to_T0.5h3.9.csv" every 6 u 1:($2/(512.*512*1500000)+0.08414880041209558):($3/(512.*512)) w yerr pt 0 lc rgb "#40bbff" not, \
+  "./curva_protocol_EJ_T0.5_h3.9_T0.066_1500k.csv" every 6 u 1:($2/(512.*512*1500000)-0.3813348342429973):($3/(512.*512)) w yerr pt 0 lc rgb "#ff00dd" not, \
+  0 lt -1 not
+
+unset label 1
+reset
+
+
+# ---------- INSET ----------
+set size 0.45,0.45
+set origin 0.5,0.15
+
+set xlabel "$t$"
+set ylabel "$10^{5} \\times \\Delta$" offset 0,0
+set xrange [70:120]
+set yrange [-3e-5:3e-5]
+set ytics ('-4' -4e-5, '-3' -3e-5, '-2' -2e-5, '-1' -1e-5, '0' 0, '1' 1e-5, '2' 2e-5, '3' 3e-5, '4' 4e-5)
+plot \
+"< paste ./curva_protocol_EJ_T0.066_to_T0.5h3.9.csv ./curva_protocol_EJ_T0.5_h3.9_T0.066_1500k.csv" every 6 \
+    u 1:(($2/(512.*512*1500000)+0.08414880041209558) - ($5/(512.*512*1500000)-0.3813348342429973)):(sqrt( ($3/(512.*512))**2 + ($6/(512.*512))**2 )) w yerr pt 0 lc rgb "dark-grey" not, \
+    0 lt -1 not
+
+
+
+unset multiplot
+
+#pause -1

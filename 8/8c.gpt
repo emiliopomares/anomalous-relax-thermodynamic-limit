@@ -1,0 +1,61 @@
+#
+set terminal cairolatex pdf standalone
+set output "8c.tex"
+
+meq_hot=0.49704133449469673
+meq_ini=0.5533598552406073
+
+ejeq_hot=0.13699638971046166
+ejeq_ini=0.21362353286995622
+
+reset
+
+set multiplot
+
+set label 1 "{\\Large \\textbf{(c)}}" at graph 0.10,0.15 center
+
+set label 2 "{\\large $E \\to C$}" at graph 0.55,0.85 center
+
+set label 3 "{\\large $C \\to E$}" at graph 0.2,0.6 center
+
+# ---------------- MAIN PLOT
+set size 1,1
+set origin 0,0
+
+#set title "T0.5 <-> T2.5 asymmetry (M)"
+set lmargin 12
+set bmargin 4
+set xrange [8:45]
+set yrange [-1e-4:5e-5]
+set xlabel "{\\LARGE $t$}"
+set ylabel "{\\LARGE $10^{5} \\times {\\langle {m}_{\\mathrm{u}}^{\\perp} \\rangle_{t}}$}" offset -1.5,0
+set ytics ('-10' -10e-5, '-8' -8e-5, '-6' -6e-5, '-4' -4e-5, '-2' -2e-5, '0' 0, '2' 2e-5, '4' 4e-5, '6' 6e-5)
+p "./curva_protocol_M_T2.5_to_T0.5_1000k_tr.csv" every 6 u 1:($2/(512.*512*1000000)-meq_ini):($3/(512.*512)) w yerr pt 0 lc rgb "#dd1000" not, \
+  "./curva_protocol_M_T0.5_to_T2.5_1000k_tr.csv" every 6 u 1:($2/(512.*512*1000000)-meq_hot):($3/(512.*512)) w yerr pt 0 lc rgb "#0030bd" not, \
+  0 lt -1 not
+
+unset label 1
+unset label 2
+unset label 3
+
+# --------------- INSET
+set size 0.45,0.45
+set origin 0.5,0.15
+
+set xlabel "$t$"
+set ylabel "$10^{6} \\times \\Delta$" offset 0,0
+set xrange [24:45]
+set yrange [-6e-6:6e-6]
+set ytics ('-4' -4e-6, '-2' -2e-6, '0' 0, '2' 2e-6, '4' 4e-6)
+plot \
+"< paste ./curva_protocol_M_T2.5_to_T0.5_1000k_tr.csv ./curva_protocol_M_T0.5_to_T2.5_1000k_tr.csv" every 6 \
+    u 1:(($2/(512.*512*1000000)-meq_ini) - ($5/(512.*512*1000000)-meq_hot)):(sqrt( ($3/(512.*512))**2 + ($6/(512.*512))**2 )) w yerr pt 0 lc rgb "dark-grey" not, 0 lt -1 not
+
+
+unset multiplot
+unset label 1
+unset label 2
+unset label 3
+reset
+
+

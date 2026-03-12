@@ -1,0 +1,63 @@
+set terminal cairolatex pdf standalone header "\\usepackage{amsfonts}"
+set output "7d.tex"
+
+set yrange [-0.25:2.6]
+set xrange [-10:10]
+
+set label 1 "{\\Large \\textbf{(d)}}" at graph 0.10,0.85 center
+
+set lmargin 14
+set bmargin 4
+set rmargin 18
+set ylabel "{\\LARGE $T$}" offset 0,0
+set xlabel "{\\LARGE $t$}"
+
+set xtics ('$t_{\mathrm{0}}$' 0)
+set ytics ('$T_{\mathrm{hot}}$' 2.5, '$T_{\mathrm{warn}}$' 0.5, '$T_{\mathrm{cold}}$' 0.067)
+set y2label "{\\LARGE $h$}" offset -1,0
+#set y2tics ('$h_{\mathrm{ini}}$' 1.1, '$h_{\mathrm{fin}}$' 1.8)
+set y2tics ('$h_{\mathrm{fin}}$' 1.8, '$h_{\mathrm{ini}}$' 1.1)
+
+
+# vertical dashed line with top-pointing arrow
+set arrow from 0,0.067 to 0,0.267 head filled size screen 0.05,15,90 dt 2 lc rgb "red" front  # top arrow
+set arrow from 0,0.5 to 0,0.7 head filled size screen 0.05,15,90 dt 2 lc rgb "red" front  # top arrow
+
+plot \
+  "7dl1.txt"  with lines lw 2 lc rgb "orange" not, \
+  "7dl2.txt"  with lines lw 2 lc rgb "blue" not, \
+  "7dh.txt" with lines lw 2 lc rgb "red" not, \
+  "7dl_h.txt"  with lines lw 2 lc rgb "grey" not, \
+  "7dh_h.txt" with lines lw 2 lc rgb "grey" not, \
+  "-" using 1:2 with lines dt 2 lw 1 lc rgb "orange" not, \
+  "-" using 1:2 with lines dt 2 lw 1 lc rgb "orange" not, \
+  "-" using 1:2 with points pt 6 ps 1.5 lc rgb "orange" not, \
+  "-" using 1:2 with points pt 6 ps 1.5 lc rgb "blue" not, \
+  "-" using 1:2 with points pt 7 ps 1.5 lc rgb "red" not, \
+  "-" using 1:2 with points pt 7 ps 1.5 lw 1 lc rgb "grey" not, \
+  "-" using 1:2 with points pt 6 ps 1.5 lc rgb "grey" not, \
+  0 lt -1 not
+
+0 0.137
+0 0.43
+e
+0 0.6
+0 2.4
+e
+0 0.5
+e
+0 0.067
+e
+0 2.5
+e
+
+# Punto gris relleno
+0 1.8
+e
+
+# Punto gris no relleno
+0 1.1
+e
+
+
+#pause -1

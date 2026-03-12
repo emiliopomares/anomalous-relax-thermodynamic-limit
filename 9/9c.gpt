@@ -1,0 +1,50 @@
+#
+set terminal cairolatex pdf standalone
+set output "9c.tex"
+
+set multiplot
+
+set label 1 "{\\Large \\textbf{(c)}}" at graph 0.90,0.85 center
+
+set label 2 "{\\large $E \\to D$}" at graph 0.55,0.85 center
+
+set label 3 "{\\large $D \\to E$}" at graph 0.10,0.45 center
+
+# ------------------ MAIN
+set lmargin 12
+set bmargin 4
+set xrange [8:100]
+set yrange [-16e-5:10e-5]
+set xlabel "{\\LARGE $t$}"
+set ylabel "{\\LARGE $10^{5} \\times {\\langle {m}_{\\mathrm{u}}^{\\perp} \\rangle_{t}}$}" offset -1.5, 0
+set ytics ('-2' -2e-5, '-4' -4e-5, '-6' -6e-5, '-8' -8e-5, '-10' -10e-5, '-12' -12e-5, '-14' -14e-5, '-16' -16e-5, '-18' -18e-5, '0' 0, '2' 2e-5, '4' 4e-5, '6' 6e-5, '8' 8e-5, '10' 10e-5)
+p "./curva_protocol_M_T2.5_to_T0.5h3.9_1500k_tr.csv" every 6 u 1:($2/(512.*512*1500000)-0.4789022654389805):($3/(512.*512)) w yerr pt 0 lc rgb "#ff00dd" not, \
+  "./curva_protocol_M_T0.5_h3.9_T2.5_1500k.csv" every 6 u 1:($2/(512.*512*1500000)-0.49704133449469673):($3/(512.*512)) w yerr pt 0 lc rgb "#40bbff" not, \
+  0 lt -1 not
+
+unset label 1
+unset label 2
+unset label 3
+reset
+
+
+# ---------- INSET ----------
+set size 0.45,0.45
+set origin 0.5,0.15
+
+set xlabel "$t$"
+set ylabel "$10^{6} \\times \\Delta$" offset 0,0
+set xrange [70:120]
+set yrange [-8e-6:8e-6]
+set ytics ('-8' -8e-6, '-4' -4e-6, '0' 0, '4' 4e-6, '8' 8e-6)
+plot \
+"< paste ./curva_protocol_M_T2.5_to_T0.5h3.9_1500k_tr.csv ./curva_protocol_M_T0.5_h3.9_T2.5_1500k.csv" every 6 \
+    u 1:(($2/(512.*512*1500000)-0.478902265438980) - ($5/(512.*512*1500000)-0.49704133449469673)):(sqrt( ($3/(512.*512))**2 + ($6/(512.*512))**2 )) w yerr pt 0 lc rgb "dark-grey" not, \
+    0 lt -1 not
+
+
+unset multiplot
+unset label 1
+reset
+
+

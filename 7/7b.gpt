@@ -1,0 +1,52 @@
+set terminal cairolatex pdf standalone header "\\usepackage{amsfonts}"
+set output "7b.tex"
+
+set yrange [-0.10:2.6]
+set xrange [-5:5]
+
+set label 1 "{\\Large \\textbf{(b)}}" at graph 0.10,0.85 center
+
+set lmargin 14
+set rmargin 18
+set bmargin 4
+set ylabel "{\\LARGE $T$}" offset -1,0
+set xlabel "{\\LARGE $t$}"
+#set y2label "{\\LARGE $h$}"
+set ytics ('$T_{\mathrm{cold}}$' 0.005, '$T_{\mathrm{warm}}$' 0.5, '$T_{\mathrm{hot}}$' 2.5)
+set xtics ('$t_{\mathrm{0}}$' 0, '$t_{\mathrm{w}}$' 0.93)
+
+toffset=0.45
+
+# vertical dashed line with top-pointing arrow
+set arrow from 0.0,0.43 to 0.0,0.23 head filled size screen 0.05,15,90 dt 2 lc rgb "blue" front # top arrow
+set arrow from 0.95,0.060 to 0.95,0.260 head filled size screen 0.05,15,90 dt 2 lc rgb "red" front  # top arrow
+
+
+plot \
+  "7bl_2.txt" u ($1+toffset):2  with lines lw 2 lc rgb "orange" not, \
+  "7bl.txt" u ($1+toffset):2 with lines lw 2 lc rgb "blue" not, \
+  "7bh.txt" u ($1+toffset):2 with lines lw 2 lc rgb "red" not, \
+  "-" using ($1+toffset):2 with lines dt 2 lw 1 lc rgb "orange" not, \
+  "-" using ($1+toffset):2 with lines dt 2 lw 1 lc rgb "orange" not, \
+  "-" using ($1+toffset):2 with points pt 6 ps 1.5 lc rgb "blue" not, \
+  "-" using ($1+toffset):2 with points pt 7 ps 1.5 lc rgb "red" not, \
+  "-" using ($1+toffset):2 with points pt 6 ps 1.5 lc rgb "orange" not, \
+  "-" using ($1+toffset):2 with points pt 7 ps 1.5 lc rgb "blue" not 
+
+# Dashed 1
+-0.450 0.015
+-0.450 0.43
+e
+
+# Dashed 2
+0.5 0.075
+0.5 2.5
+e
+0.5 0.005
+e
+0.5 2.5
+e
+-0.450 0.5
+e
+-0.450 0.005
+e
