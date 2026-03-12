@@ -1,0 +1,55 @@
+#
+set terminal cairolatex pdf standalone
+set output "10b.tex"
+
+v = 512.*512
+meq=0.49704133449469673
+ejeq=0.13699638971046166
+
+set multiplot
+
+# ---------- MAIN PLOT ----------
+set size 1,1
+set origin 0,0
+
+set label 1 "{\\Large \\textbf{(b)}}" at graph 0.90,0.85 center
+
+set lmargin 12
+set bmargin 4
+set xlabel "{\\huge $t$}"
+set ylabel "{\\huge ${\\langle {m}_{\\mathrm{u}}^{\\perp} \\rangle_{t}}$}" offset -2,0
+set format y "%.2f"
+set xrange [0:10]
+set yrange [-0.02:0.22]
+p "curva_M_0.000_all.txt" every 2 u 1:($2/(512.*512)-meq):($3/(512.*512)) with points pt 7 ps 0.25 not, \
+  "curva_M_0.214_all-offset-0.214-spliced.txt" every 2 u 1:($2/(512.*512)-meq):($3/(512.*512)) with points pt 7 ps 0.25 not, \
+  "curva_M_0.350_all-offset-0.35-spliced.txt" every 2 u 1:($2/(512.*512)-meq):($3/(512.*512)) with points pt 7 ps 0.25 not, \
+  "curva_M_0.420_all-offset-0.42-spliced.txt" every 2 u 1:($2/(512.*512)-meq):($3/(512.*512)) with points pt 7 ps 0.25 not, \
+  "curva_M_0.450_all-offset-0.45-spliced.txt" every 2 u 1:($2/(512.*512)-meq):($3/(512.*512)) with points pt 7 ps 0.25 not, \
+  0 lt -1 not
+
+unset label 1
+reset
+
+# ------------ INSET -------------
+
+set size 0.55,0.55
+set origin 0.4,0.22
+
+set lmargin 12
+set bmargin 4
+set xlabel "{\\large $t$}"
+set ylabel "{\\large $10^{5} \\times {\\langle {m}_{\\mathrm{u}}^{\\perp} \\rangle_{t}}$}" offset -1,0
+set ytics ('-10' -10e-5, '-5' -5e-5, '0' 0, '5' 5e-5, '10' 10e-5)
+set xrange [5:14]
+set yrange [-1e-4:1e-4]
+p "curva_M_0.000_all.txt" every 12 u ($1+0.000):($2/(512.*512)-meq):($3/(512.*512)) w yerr pt 0 not, \
+  "curva_M_0.214_all.txt" every 12 u ($1+0.214):($2/(512.*512)-meq):($3/(512.*512)) w yerr pt 0 not, \
+  "curva_M_0.350_all.txt" every 12 u ($1+0.350):($2/(512.*512)-meq):($3/(512.*512)) w yerr pt 0 not, \
+  "curva_M_0.420_all.txt" every 12 u ($1+0.420):($2/(512.*512)-meq):($3/(512.*512)) w yerr pt 0 not, \
+  "curva_M_0.450_all.txt" every 12 u ($1+0.450):($2/(512.*512)-meq):($3/(512.*512)) w yerr pt 0 not, 0 lt -1 not
+
+
+unset multiplot
+reset
+

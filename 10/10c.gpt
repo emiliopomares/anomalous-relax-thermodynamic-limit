@@ -1,0 +1,44 @@
+reset
+set auto
+
+set terminal cairolatex pdf standalone
+set output "10c.tex"
+
+v=512.*512
+
+set label 1 "{\\Large \\textbf{(c)}}" at graph 0.90,0.85 center
+
+chi_st_final = 2.563333685248
+
+color(s) = \
+    (s eq "red")    ? "red"    : \
+    (s eq "yellow") ? "yellow" : \
+    (s eq "blue")   ? "blue"   : \
+    (s eq "dark-green")   ? "dark-green"   : \
+    (s eq "orange")   ? "orange"   : \
+    (s eq "pink")   ? "pink"   : \
+                      "black"
+
+set xlabel "{\\huge $t_{\\mathrm{w}}$}"
+set ylabel "{\\LARGE ${\\chi_{\\mathrm{st}}^{\\mathrm{dyn}}(t)}$}" offset -2,0
+set lmargin 12
+set bmargin 4
+set format y "%.1f"
+p [0:0.5] "curva_protocol_Ms2_T0.5_h3.9.csv" every 3 u 1:($2/(3000000*v)):($3/v) w yerr lc rgb "dark-grey" not, \
+  chi_st_final with lines lc rgb "red" dt 2 lw 1 not, \
+  '-' w points pt 9 ps 1.6 lc rgb "#9400D3" not, \
+  '-' w points pt 9 ps 1.4 lc rgb "#009E73" not, \
+  '-' w points pt 9 ps 1.8 lc rgb "#56B4E9" not, \
+  '-' w points pt 9 ps 1.6 lc rgb "#E69F00" not, \
+  '-' w points pt 9 ps 1.5 lc rgb "#F0E442" not
+# inline data blocks
+0.000  3.635489
+e
+0.214  2.562658
+e
+0.350  2.043624
+e
+0.420  1.828662
+e
+0.450  1.744367
+e

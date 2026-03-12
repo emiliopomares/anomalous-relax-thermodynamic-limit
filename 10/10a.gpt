@@ -1,0 +1,55 @@
+#
+set terminal cairolatex pdf standalone
+
+v = 512.*512
+meq=0.49704133449469673
+ejeq=0.13699638971046166
+
+# ---------- NEW OUTPUT -------------
+set output "10a.tex"
+
+
+set multiplot
+
+# ---------- MAIN PLOT ----------
+set size 1,1
+set origin 0,0
+
+set label 1 "{\\Large \\textbf{(a)}}" at graph 0.90,0.85 center
+
+set lmargin 12
+set bmargin 4
+set xlabel "{\\huge $t$}"
+set ylabel "{\\huge ${\\langle {e_{J}^{\\perp}} \\rangle_{t}}$}" offset -2,0
+set format y "%.2f"
+set xrange [0:10]
+set yrange [-0.03:0.72]
+p "curva_EJ_0.000_all.txt" every 2 u 1:($2/(512.*512)-ejeq):($3/(512.*512)) with points pt 7 ps 0.25 not, \
+  "curva_EJ_0.214_all-offset-0.214-spliced.txt" every 2 u 1:($2/(512.*512)-ejeq):($3/(512.*512)) with points pt 7 ps 0.25 not, \
+  "curva_EJ_0.350_all-offset-0.35-spliced.txt" every 2 u 1:($2/(512.*512)-ejeq):($3/(512.*512)) with points pt 7 ps 0.25 not, \
+  "curva_EJ_0.420_all-offset-0.42-spliced.txt" every 2 u 1:($2/(512.*512)-ejeq):($3/(512.*512)) with points pt 7 ps 0.25 not, \
+  "curva_EJ_0.450_all-offset-0.45-spliced.txt" every 2 u 1:($2/(512.*512)-ejeq):($3/(512.*512)) with points pt 7 ps 0.25 not, \
+  0 lt -1 not
+
+reset
+
+# --------- INSET -----------
+
+set size 0.55,0.55
+set origin 0.4,0.22
+
+set lmargin 12
+set bmargin 4
+set xlabel "{\\large $t$}"
+set ylabel "{\\large $10^{4} \\times {\\langle {e_{J}^{\\perp}} \\rangle_{t}}$}" offset -1,0
+set xrange [5:14]
+set ytics ('-12' -12e-4, '-9' -9e-4, '-6' -6e-4, '-3' -3e-4, '0' 0, '3' 3e-4, '6' 6e-4, '9' 9e-4, '12' 12e-4)
+set yrange [-8e-4:8e-4]
+p "curva_EJ_0.000_all.txt" every 12 u ($1+0.000):($2/(512.*512)-ejeq):($3/(512.*512)) w yerr pt 0 not, \
+  "curva_EJ_0.214_all.txt" every 12 u ($1+0.214):($2/(512.*512)-ejeq):($3/(512.*512)) w yerr pt 0 not, \
+  "curva_EJ_0.350_all.txt" every 12 u ($1+0.350):($2/(512.*512)-ejeq):($3/(512.*512)) w yerr pt 0 not, \
+  "curva_EJ_0.420_all.txt" every 12 u ($1+0.420):($2/(512.*512)-ejeq):($3/(512.*512)) w yerr pt 0 not, \
+  "curva_EJ_0.450_all.txt" every 12 u ($1+0.450):($2/(512.*512)-ejeq):($3/(512.*512)) w yerr pt 0 not, 0 lt -1 not
+
+unset multiplot
+reset
